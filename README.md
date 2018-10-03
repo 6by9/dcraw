@@ -7,6 +7,7 @@ Raspberry Pi camera modules, or just the raw file with Broadcom
 header passing data on raw format and resolution.
 
 Build instructions:
+```
 sudo apt-get install libjasper-dev libjpeg8-dev gettext liblcms2-dev
 ./buildme
-
+```
