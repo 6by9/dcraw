@@ -8162,10 +8162,10 @@ void CLASS identify()
           !strncasecmp(model, "RP_imx477",9)) {
         const long offsets[] = {
                 //IMX477 offsets
-                3375104,  //2028x1080
-                4751360,  //2028x1520
-                18711040, //4056x3040
-                1015808,  //1012x760
+                3375104,  //2028x1080 12bit
+                4751360,  //2028x1520 12bit
+                18711040, //4056x3040 12bit
+                1015808,  //1012x760 10bit
                 -1        //Marker for end of table
         };
         int offset_idx;
@@ -8174,6 +8174,7 @@ void CLASS identify()
              fread (head, 1, 32, ifp) && !strncmp(head,"BRCM", 4)) {
             fseek(ifp, -32, SEEK_CUR);
             strcpy (make, "SonyRPF");
+            black = (offset_idx == 3) ? 64 : 256;
             parse_raspberrypi();
             break;
           }
@@ -8197,6 +8198,7 @@ void CLASS identify()
 
             fseek(ifp, -32, SEEK_CUR);
             strcpy (make, "SonyRPF");
+            black = 66;
             parse_raspberrypi();
             break;
           }
@@ -8220,6 +8222,7 @@ void CLASS identify()
             //Defaults
             raw_width = 2611;
             filters = 0x16161616;
+            black = 16;
             parse_raspberrypi();
             break;
           }
@@ -8327,7 +8330,7 @@ void CLASS identify()
     top_margin = filters = 0;
     strcpy (model,"C603");
   }
-  if (!strcmp(make,"Sony") && raw_width > 3888)
+  if (!black && !strcmp(make,"Sony") && raw_width > 3888)
     black = 128 << (tiff_bps - 12);
   if (is_foveon) {
     if (height*2 < width) pixel_aspect = 0.5;
